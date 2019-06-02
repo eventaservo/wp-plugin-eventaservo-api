@@ -21,11 +21,8 @@ if (isset($_POST['submit'])) {
     /* copy and overwrite $post for checkboxes */
     $form = $_POST;
 
-    foreach ($settings->map_options as $name => $option) {
+    foreach ($settings->calendar_options as $name => $option) {
         /* checkboxes don't get sent if not checked */
-        if ($option->type === 'checkbox') {
-            $form[$name] = isset($_POST[ $name ]) ? 1 : 0;
-        }
         $value = trim( stripslashes( $form[$name]) );
         $settings->set($name, $value);
     }
@@ -39,13 +36,6 @@ if (isset($_POST['submit'])) {
 ?>
 <div class="notice notice-success is-dismissible">
     <p><?php _e('Options have been reset to default values!', 'eventaservo-api'); ?></p>
-</div>
-<?php
-} elseif (isset($_POST['clear-geocoder-cache'])) {
-    echo "HALLO";
-?>
-<div class="notice notice-success is-dismissible">
-    <p><?php _e('Location caches have been cleared!', 'eventaservo-api'); ?></p>
 </div>
 <?php
 }
@@ -62,11 +52,11 @@ if (isset($_POST['submit'])) {
           <hr>
           <div class="">
               <label class="label">Width:</label>
-              <input id="calendar-width" name="calendar-width" type="text" placeholder="100%">
+              <input id="calendar-width" name="calendar-width" type="text" placeholder="100%" value="<?php echo htmlspecialchars($settings->get("calendar-width")); ?>">
           </div>
           <div class="">
               <label class="label">Height:</label>
-              <input id="calendar-height" name="calendar-height" type="text" placeholder="500px">
+              <input id="calendar-height" name="calendar-height" type="text" placeholder="500px" value="<?php echo htmlspecialchars($settings->get("calendar-height")); ?>">
           </div>
         </div>
         <div class="container">
@@ -74,15 +64,12 @@ if (isset($_POST['submit'])) {
             <hr>
               <div>
                 <label class="label">Fullcalendar JS:</label>
-                <input id="js_url" name="js_url" type="url" placeholder="https://unpkg.com/fullcalendar@3.10.0/dist/fullcalendar.js">
+                <input id="fullcalendar_js_url" name="fullcalendar_js_url" type="url" placeholder="https://unpkg.com/fullcalendar@3.10.0/dist/fullcalendar.js" value="<?php echo htmlspecialchars($settings->get("fullcalendar_js_url")); ?>">
               </div>
               <div>
                   <label class="label">Fullcalendar CSS:</label>
-                  <input id="css_url" name="css_url" type="url" placeholder="https://unpkg.com/fullcalendar@3.10.0/dist/fullcalendar.css">
+                  <input id="fullcalendar_css_url" name="fullcalendar_css_url" type="url" placeholder="https://unpkg.com/fullcalendar@3.10.0/dist/fullcalendar.css" value="<?php echo htmlspecialchars($settings->get("fullcalendar_css_url")); ?>">
               </div>
-              <h4>Other Options</h4>
-              <hr>
-              ...
         </div>
     <div class="submit">
         <input type="submit"
@@ -95,11 +82,6 @@ if (isset($_POST['submit'])) {
             id="reset"
             class="button button-secondary"
             value="<?php _e('Reset to Defaults', 'eventaservo-api'); ?>">
-        <input type="submit"
-            name="clear-geocoder-cache"
-            id="clear-geocoder-cache"
-            class="button button-secondary"
-            value="<?php _e('Clear Geocoder Cache', 'eventaservo-api'); ?>">
     </div>
 
     </form>

@@ -19,7 +19,7 @@ class Eventaservo_Plugin_Settings
 
     //Singleton instance
     private static $_instance = null;
-    public $options = array();
+    public $options;
 
     public static function init() {
         if ( !self::$_instance ) {
@@ -39,22 +39,24 @@ class Eventaservo_Plugin_Settings
             'events_from_user' => '',
             'date_start' => '',
             'date_end'   => '',
+            'lastEventFetch' => 0,
+            'eventJSON' => '',
         );
         $this->map_options = array(
-            'show_zoom_controls' => '0',
-            'allow_map_scroll' => '1',
-            'map_tile_url' => 'https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png',
-            'leaflet_js_url' => sprintf('https://unpkg.com/leaflet@%s/dist/leaflet.js', $leaflet_version),
-            'leaflet_cluster_js_url' => sprintf('https://unpkg.com/leaflet@%s/dist/leaflet.js', $leaflet_version),
-            'leaflet_prunecluster_js_url' => sprintf('https://unpkg.com/leaflet@%s/dist/leaflet.js', $leaflet_version),
-            'leaflet_css_url' => sprintf('https://unpkg.com/leaflet@%s/dist/leaflet.css', $leaflet_version),
+            "clustering"   => "no",
+            "map-width"    => "100%",
+            "map-height"   => "500px",
             "cord-lat"     => "0.000000",
             "cord-lon"     => "0.000000",
             "zoom-min"     => "1",
             "zoom-max"     => "18",
             "zoom-start"   => "5",
-            "map-width"    => "100%",
-            "map-height"   => "500px",
+            'map_tile_url' => 'https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png',
+            'leaflet_js_url' =>  sprintf('https://unpkg.com/leaflet@%s/dist/leaflet.js', $leaflet_version),
+            'leaflet_css_url' => sprintf('https://unpkg.com/leaflet@%s/dist/leaflet.css', $leaflet_version),
+            'leaflet_cluster_js_url' => 'https://unpkg.com/leaflet.markercluster@1.4.1/dist/',
+            'show_zoom_controls' => '1',
+            'allow_map_scroll' => '1',
         );
 
         $this->calendar_options = array(
@@ -63,11 +65,12 @@ class Eventaservo_Plugin_Settings
             'fullcalendar_js_url' => sprintf('https://unpkg.com/fullcalendar@3.10.0/dist/fullcalendar.js', $leaflet_version),
             'fullcalendar_css_url' => sprintf('https://unpkg.com/fullcalendar@3.10.0/dist/fullcalendar.css', $leaflet_version),
         );
+        $options = array_merge($this->api_options, $this->map_options, $this->calendar_options);
     }
 
     public function get($key)
     {
-        $default = $this->options[ $key ]->default;
+        $default = $this->options[ $key ];
         $key = $this->prefix . $key;
         return get_option($key, $default);
     }
