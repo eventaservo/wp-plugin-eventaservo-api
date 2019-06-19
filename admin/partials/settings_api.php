@@ -69,12 +69,33 @@ if (isset($_POST['submit'])) {
               <input id="events_from_user" name="events_from_user" type="text" placeholder="If empty, show events of all users..." value="<?php echo htmlspecialchars($settings->get("events_from_user")); ?>">
           </div>
           <div>
-              <label class="label">Start date:</label>
+              <label class="label">Start date: <small>(if empty starting from today)</small></label>
               <input id="date_start" name="date_start" type="date" placeholder="today" value="<?php echo htmlspecialchars($settings->get("date_start")); ?>">
           </div>
           <div>
-              <label class="label">End date:</label>
+              <label class="label">End date: <small>(if empty searches events up to next year)</small></label>
               <input id="date_end" name="date_end" type="date" placeholder="today + 1 year" value="<?php echo htmlspecialchars($settings->get("date_end")); ?>">
+          </div>
+          <div class="">
+              <label class="label">Only events from Country:</label>
+              <select style="float:right;" name="country_filter">
+                <option value="">-----------------</option>
+                <?php
+                $str = file_get_contents( dirname( __FILE__ )  . '/../assets/countries.json');
+                $j = json_decode($str, true);
+                foreach($j as $key => $value){
+                  echo '<option value="' . $value['country_code'] . '"';
+                  if ($settings->get("country_filter") == $value['country_code']) {
+                      echo ' selected="selected" ';
+                  }
+                  echo  '>'.$value['name'] . '</option>'; //close your tags!!
+                }
+                ?>
+              </select>
+          </div>
+          <div class="">
+              <label class="label">Additional search radius: <small>(works only together with country)</small></label>
+              <input id="country_radius" name="country_radius" type="number" placeholder="0" step="1" min="0" max="20000" value="<?php echo htmlspecialchars($settings->get("country_radius")); ?>">
           </div>
       </div>
   <div class="submit">

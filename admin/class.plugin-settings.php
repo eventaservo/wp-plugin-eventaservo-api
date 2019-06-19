@@ -39,8 +39,10 @@ class Eventaservo_Plugin_Settings
             'events_from_user' => '',
             'date_start' => '',
             'date_end'   => '',
-            'lastEventFetch' => 0,
-            'eventJSON' => '',
+            'country_filter'   => '',
+            'country_radius'   => 0,
+            //'lastEventFetch' => 0,
+            //'eventJSON' => '',
         );
         $this->map_options = array(
             "clustering"   => "no",
