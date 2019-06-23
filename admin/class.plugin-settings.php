@@ -64,6 +64,7 @@ class Eventaservo_Plugin_Settings
         $this->calendar_options = array(
             "calendar-width"    => "100%",
             "calendar-height"   => "500px",
+            "list_view"   => '1',
             'fullcalendar_js_url' => sprintf('https://unpkg.com/fullcalendar@3.10.0/dist/fullcalendar.js', $leaflet_version),
             'fullcalendar_css_url' => sprintf('https://unpkg.com/fullcalendar@3.10.0/dist/fullcalendar.css', $leaflet_version),
         );

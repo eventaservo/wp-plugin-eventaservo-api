@@ -199,11 +199,7 @@
             }
             calendarEvents.push(evento);
         }
-
-        //setup Calendar kaj aldonu eventojn
-        $('#kalendaro').fullCalendar({
-              plugins: [ 'list' ],
-              defaultView: 'listYear',
+        var calendar = {
               locale:"eo",
               minDate: minDate,
               maxDate: maxDate,
@@ -222,7 +218,13 @@
                       }
                   });
               }
-        }).fullCalendar( 'gotoDate', minDate );
+        };
+        if(eventaservo_settings.kalendaro.list_view){
+            calendar.plugins = [ 'list' ];
+            calendar.defaultView = 'listYear';
+        }
+        //setup Calendar kaj aldonu eventojn
+        $('#kalendaro').fullCalendar(calendar).fullCalendar( 'gotoDate', minDate );
     }
 
     function initAll(){

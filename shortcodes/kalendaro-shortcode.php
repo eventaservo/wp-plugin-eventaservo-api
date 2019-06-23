@@ -35,13 +35,16 @@ class Eventaservo_Api_Shortcode_Kalendaro
         $lng = empty($lng) ? $settings->get('cord-lon') : $lng;
         $tileurl = empty($tileurl) ? $settings->get('map_tile_url') : $tileurl;
         $eventoj = getEventJSON();
+        $list_view = empty($lng) ? $settings->get('list_view') : $lng;
         /* should be iterated for multiple maps */
         ob_start(); ?>
         <div id="kalendaro" class="leaflet-map"
             style="height:<?php echo $height; ?>; width:<?php echo $width; ?>;"></div> <!--TODO -<?php echo $this->map_id; ?>-->
         <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.24.0/moment.min.js"></script>
         <script type="text/javascript">
-        eventaservo_settings.kalendaro = {};
+        eventaservo_settings.kalendaro = {
+          list_view: <?php echo $list_view ?>,
+        };
         </script>
         <?php wp_add_inline_script("mpi", "$( document ).ready(map_init);");
         wp_enqueue_script("mpi");
@@ -107,7 +110,7 @@ class Eventaservo_Api_Shortcode_Kalendaro
         $atts['scrollwheel'] = true;//array_key_exists('scrollwheel', $atts) ?
             //$scrollwheel : $settings->get('scroll_wheel_zoom');
         $atts['doubleclickzoom'] = true;//array_key_exists('doubleclickzoom', $atts) ?
-        $atts['list_view'] = true;//array_key_exists('doubleclickzoom', $atts) ? 
+        $atts['list_view'] = true;//array_key_exists('doubleclickzoom', $atts) ?
             //$doubleclickzoom : $settings->get('double_click_zoom');
 
         // @deprecated backwards-compatible fit_markers

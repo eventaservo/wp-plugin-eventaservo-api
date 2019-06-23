@@ -23,6 +23,10 @@ if (isset($_POST['submit'])) {
 
     foreach ($settings->calendar_options as $name => $option) {
         /* checkboxes don't get sent if not checked */
+        if ($name == 'list_view') {
+            $form[$name] = $settings->set($name, isset($_POST[ $name ]) ? 1 : 0);
+            continue;
+        }
         $value = trim( stripslashes( $form[$name]) );
         $settings->set($name, $value);
     }
@@ -57,6 +61,10 @@ if (isset($_POST['submit'])) {
           <div class="">
               <label class="label">Height:</label>
               <input id="calendar-height" name="calendar-height" type="text" placeholder="500px" value="<?php echo htmlspecialchars($settings->get("calendar-height")); ?>">
+          </div>
+          <div class="">
+              <label class="label">Show events as list:</label>
+              <input id="list_view" name="list_view" type="checkbox" <?php if ($settings->get("list_view")=="1") {echo "checked";} ?>>
           </div>
         </div>
         <div class="container">
