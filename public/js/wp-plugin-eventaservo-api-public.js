@@ -202,6 +202,8 @@
 
         //setup Calendar kaj aldonu eventojn
         $('#kalendaro').fullCalendar({
+              plugins: [ 'list' ],
+              defaultView: 'listYear',
               locale:"eo",
               minDate: minDate,
               maxDate: maxDate,
@@ -211,8 +213,6 @@
                   right: 'prev,next'
               },
               events: calendarEvents,
-              plugins: [ 'list' ],
-              defaultView: 'listYear',
               eventRender: function(event, element) {
                   element.qtip({
                       content: event.description,
@@ -226,8 +226,10 @@
     }
 
     function initAll(){
-        initCalendar();
-        map_init();
+        if(eventaservo_settings.hasOwnProperty("kalendaro"))
+            initCalendar();
+        if(eventaservo_settings.hasOwnProperty("mapo"))
+            map_init();
     }
     $( document ).ready(initAll);
 })( jQuery );

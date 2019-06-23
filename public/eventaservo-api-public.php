@@ -72,9 +72,6 @@ class Eventaservo_Api_Public {
      * between the defined hooks and the functions defined in this
      * class.
      */
-
-    wp_enqueue_style( $this->plugin_name, plugin_dir_url( __FILE__ ) . 'css/wp-plugin-eventaservo-api-public.css', array(), $this->version, 'all' );
-
   }
 
   /**
@@ -95,13 +92,6 @@ class Eventaservo_Api_Public {
      * between the defined hooks and the functions defined in this
      * class.
      */
-
-    //global $post;
-    //if( is_a( $post, 'WP_Post' ) && has_shortcode( $post->post_content, 'evento_mapo') ) {
-    wp_enqueue_script( "PruneCluster", plugin_dir_url( __FILE__ ) . 'js/PruneCluster.js', array(), $this->version, true);
-    //}
-    wp_enqueue_script( $this->plugin_name, plugin_dir_url( __FILE__ ) . 'js/wp-plugin-eventaservo-api-public.js', array( 'jquery' ), $this->version, false );
-
   }
 
 }

@@ -24,6 +24,10 @@ if (!defined('ABSPATH')) {
  * @subpackage Wp_Plugin_Eventaservo_Api/includes
  * @author     Paul Würtz <paulwuertz@posteo.de>
  */
+
+require_once plugin_dir_path( dirname( __FILE__ ) ) . 'admin/eventaservo-api-admin.php';
+$settings = Eventaservo_Plugin_Settings::init();
+
 class Eventaservo_Api {
 
 	protected $loader;
@@ -47,7 +51,6 @@ class Eventaservo_Api {
 			$this->version = '1.0.0';
 		}
 		$this->plugin_name = 'eventaservo-api';
-
 		$this->load_dependencies();
 		$this->set_locale();
 		$this->define_admin_hooks();
@@ -73,25 +76,65 @@ private function load_dependencies(){
 
 		$this->loader = new Eventaservo_Api_Loader();
 
-		//$content_post = get_post($pageid);
-    //$content = $content_post->post_content;
-		//if( has_shortcode( $content, 'evento_mapo' ) ) {
 		add_action( 'wp_enqueue_scripts', array('Eventaservo_Api', 'enqueues' ));
-		//}
 	}
 
-	public static function enqueues(){
-		require_once plugin_dir_path( dirname( __FILE__ ) ) . 'admin/class.plugin-settings.php';
-		$settings = Eventaservo_Plugin_Settings::init();
-		wp_enqueue_style('leaflet_stylesheet', $settings->get("leaflet_css_url"));
-		wp_enqueue_script('wp_leaflet_map', $settings->get("leaflet_js_url"));
-		wp_enqueue_style('wp_fullcalendar_css', $settings->get("fullcalendar_css_url"), array());
+  public static function getEventJSON(){
+      //get event JSON
+      $settings = Eventaservo_Plugin_Settings::init();
+      $mail = $settings->get('user_mail');
+      $api_key = $settings->get('user_token');
+      $date_start = $settings->get('date_start');
+      $date_end = $settings->get('date_end');
+      $filters = "";
+      $url = "https://eventaservo.org/api/v1/events.json?user_email=$mail&user_token=$api_key&komenca_dato=$date_start&fina_dato=$date_end"; //&$filters
+      $json = file_get_contents($url);
+      $obj = json_decode($json);
+      $json_string = json_encode($obj, JSON_UNESCAPED_UNICODE);
+      return $json_string;
+  }
 
-    wp_enqueue_script( "momentjs", 'https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.24.0/moment.min.js', array(), 0, true);
-		wp_enqueue_script( "momentjs_eo", 'https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.24.0/locale/eo.js', array(), 0, true);
-    wp_enqueue_script( "qtip", 'https://cdnjs.cloudflare.com/ajax/libs/qtip2/3.0.3/basic/jquery.qtip.js', array(), 0, true);
-		wp_enqueue_style('fullcalendar_stylesheet', $settings->get("fullcalendar_css_url"), array(), 0, true);
-		wp_enqueue_script('wp_fullcalendar_js', $settings->get("fullcalendar_js_url"), array(), 0, true);
+	public static function enqueues(){
+		global $post;
+    $cont = $post->post_content;
+    $has_mapo = has_shortcode($cont, "evento_mapo");
+    $has_kalendaro = has_shortcode($cont, "evento_kalendaro");
+    //TODO pensu pri caching
+    //$time = $this->settings->get('lastEventFetch');
+    //if ($time + 1000 * 60 * 15 < microtime(true)) {
+    //  $this->eventJSON = $settings->get('eventJSON');
+    //} else {
+    //  $this->eventJSON = $this->getEventJSON();
+    //  $settings->set('lastEventFetch', $time);
+    //  $settings->set('eventJSON', $this->eventJSON);
+    //}
+    $eventoj = self::getEventJSON();
+
+    ?>
+    <script type="text/javascript">
+    var eventaservo_settings = {
+      eventdatoj: <?php echo $eventoj?>,
+    };
+    </script>
+    <?php
+    $settings = Eventaservo_Plugin_Settings::init();
+    if ($has_mapo || $has_kalendaro) {
+        wp_enqueue_script("momentjs", 'https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.24.0/moment.min.js', array(), 0, true);
+    }
+    if ($has_mapo) {
+        wp_enqueue_style('leaflet_stylesheet', $settings->get("leaflet_css_url"));
+        wp_enqueue_script('wp_leaflet_map_js', $settings->get("leaflet_js_url"));
+        wp_enqueue_script("PruneCluster", plugin_dir_url( __FILE__ ) . '../public/js/PruneCluster.js', array(), 0, true);
+    }
+    if ($has_kalendaro) {
+        wp_enqueue_script("qtip", 'https://cdnjs.cloudflare.com/ajax/libs/qtip2/3.0.3/basic/jquery.qtip.js', array(), 0, true);
+        wp_enqueue_style('fullcalendar_stylesheet', $settings->get("fullcalendar_css_url"));
+    		wp_enqueue_script('wp_fullcalendar_js', $settings->get("fullcalendar_js_url"), array(), 0, true);
+    }
+    if ($has_mapo || $has_kalendaro) {
+      wp_enqueue_script("eventaservo_js" , plugin_dir_url( __FILE__ ) . '../public/js/wp-plugin-eventaservo-api-public.js', array( 'jquery' ), 0, false );
+      wp_enqueue_style( "eventaservo_css", plugin_dir_url( __FILE__ ) . '../public/css/wp-plugin-eventaservo-api-public.css', array(), 0, 'all' );
+    }
 	}
 
 	private function set_locale(){

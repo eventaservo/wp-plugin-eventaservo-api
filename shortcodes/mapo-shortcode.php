@@ -1,24 +1,14 @@
 <?php
 
+
+require_once plugin_dir_path( dirname( __FILE__ ) ) . 'shortcodes/shortcodes-common.php';
+require_once plugin_dir_path( dirname( __FILE__ ) ) . 'admin/eventaservo-api-admin.php';
+
 class Eventaservo_Api_Shortcode_Mapo
 {
     protected $map_id = 0;
     private $eventJSON;
     private $settings;
-
-    public function getEventJSON(){
-        //get event JSON
-        $mail = $this->settings->get('user_mail');
-        $api_key = $this->settings->get('user_token');
-        $date_start = $this->settings->get('date_start');
-        $date_end = $this->settings->get('date_end');
-        $filters = "";
-        $url = "https://eventaservo.org/api/v1/events.json?user_email=$mail&user_token=$api_key&komenca_dato=$date_start&fina_dato=$date_end"; //&$filters
-        $json = file_get_contents($url);
-        $obj = json_decode($json);
-        $json_string = json_encode($obj, JSON_UNESCAPED_UNICODE);
-        return $json_string;
-    }
 
     /**
      * Get script for shortcode
@@ -31,17 +21,6 @@ class Eventaservo_Api_Shortcode_Mapo
     protected function getHTML($atts='', $content=null){
         extract($this->getAtts($atts));
         $settings = $this->settings;
-
-        //TODO pensu pri caching
-        //$time = $this->settings->get('lastEventFetch');
-        //if ($time + 1000 * 60 * 15 < microtime(true)) {
-        //  $this->eventJSON = $settings->get('eventJSON');
-        //} else {
-        //  $this->eventJSON = $this->getEventJSON();
-        //  $settings->set('lastEventFetch', $time);
-        //  $settings->set('eventJSON', $this->eventJSON);
-        //}
-        $eventoj = $this->getEventJSON();
         $lat = empty($lat) ? $settings->get('cord-lat') : $lat;
         $lng = empty($lng) ? $settings->get('cord-lon') : $lng;
         $zoom = empty($zoom) ? $settings->get('zoom-start') : $zoom;
@@ -51,9 +30,7 @@ class Eventaservo_Api_Shortcode_Mapo
         <div id="eventaservo_leaflet-map" class="leaflet-map"
             style="height:<?php echo $height; ?>; width:<?php echo $width; ?>;"></div>  <!-- php echo $this->map_id;  -->
         <script type="text/javascript">
-        var eventaservo_settings = {
-          eventdatoj: <?php echo $eventoj?>,
-          mapo: {
+        eventaservo_settings.mapo = {
               map_tile_url: '<?php echo $tileurl?>',
               max_zoom: <?php echo $max_zoom; ?>,
               min_zoom: <?php echo $min_zoom; ?>,
@@ -64,8 +41,7 @@ class Eventaservo_Api_Shortcode_Mapo
               lat: <?php echo $lat ?>,
               lng: <?php echo $lng ?>,
               zoom: <?php echo $zoom ?>,
-          }
-        };
+          };
         </script>
         <?php
         return ob_get_clean();

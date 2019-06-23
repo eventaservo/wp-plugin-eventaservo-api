@@ -1,24 +1,14 @@
 <?php
 
+
+require_once plugin_dir_path( dirname( __FILE__ ) ) . 'shortcodes/shortcodes-common.php';
+require_once plugin_dir_path( dirname( __FILE__ ) ) . 'admin/eventaservo-api-admin.php';
+$settings = Eventaservo_Plugin_Settings::init();
+
 class Eventaservo_Api_Shortcode_Kalendaro
 {
     protected $map_id = 0;
     private $eventJSON;
-    private $settings;
-
-    public function getEventJSON(){
-        //get event JSON
-        $mail = $this->settings->get('user_mail');
-        $api_key = $this->settings->get('user_token');
-        $date_start = $this->settings->get('date_start');
-        $date_end = $this->settings->get('date_end');
-        $filters = "";
-        $url = "https://eventaservo.org/api/v1/events.json?user_email=$mail&user_token=$api_key&komenca_dato=$date_start&fina_dato=$date_end"; //&$filters
-        $json = file_get_contents($url);
-        $obj = json_decode($json);
-        $json_string = json_encode($obj, JSON_UNESCAPED_UNICODE);
-        return $json_string;
-    }
 
     /**
      * Get script for shortcode
@@ -30,29 +20,30 @@ class Eventaservo_Api_Shortcode_Kalendaro
      */
     protected function getHTML($atts='', $content=null){
         extract($this->getAtts($atts));
-        $settings = $this->settings;
 
         //TODO pensu pri caching
         //$time = $this->settings->get('lastEventFetch');
         //if ($time + 1000 * 60 * 15 < microtime(true)) {
         //  $this->eventJSON = $settings->get('eventJSON');
         //} else {
-        //  $this->eventJSON = $this->getEventJSON();
+        //  $this->eventJSON = getEventJSON();
         //  $settings->set('lastEventFetch', $time);
         //  $settings->set('eventJSON', $this->eventJSON);
         //}
+        $settings = Eventaservo_Plugin_Settings::init();
         $lat = empty($lat) ? $settings->get('cord-lat') : $lat;
         $lng = empty($lng) ? $settings->get('cord-lon') : $lng;
         $tileurl = empty($tileurl) ? $settings->get('map_tile_url') : $tileurl;
-        $eventoj = $this->getEventJSON();
+        $eventoj = getEventJSON();
         /* should be iterated for multiple maps */
         ob_start(); ?>
         <div id="kalendaro" class="leaflet-map"
             style="height:<?php echo $height; ?>; width:<?php echo $width; ?>;"></div> <!--TODO -<?php echo $this->map_id; ?>-->
         <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.24.0/moment.min.js"></script>
-        <script>
-        ///Jen kalendaro
-        </script><?php wp_add_inline_script("mpi", "$( document ).ready(map_init);");
+        <script type="text/javascript">
+        eventaservo_settings.kalendaro = {};
+        </script>
+        <?php wp_add_inline_script("mpi", "$( document ).ready(map_init);");
         wp_enqueue_script("mpi");
         return ob_get_clean();
     }
@@ -94,7 +85,6 @@ class Eventaservo_Api_Shortcode_Kalendaro
 
     protected function __construct(){
         require_once plugin_dir_path( dirname( __FILE__ ) ) . 'admin/class.plugin-settings.php';
-        $this->settings = Eventaservo_Plugin_Settings::init();
     }
 
     protected function getAtts($atts=''){
@@ -117,6 +107,7 @@ class Eventaservo_Api_Shortcode_Kalendaro
         $atts['scrollwheel'] = true;//array_key_exists('scrollwheel', $atts) ?
             //$scrollwheel : $settings->get('scroll_wheel_zoom');
         $atts['doubleclickzoom'] = true;//array_key_exists('doubleclickzoom', $atts) ?
+        $atts['list_view'] = true;//array_key_exists('doubleclickzoom', $atts) ? 
             //$doubleclickzoom : $settings->get('double_click_zoom');
 
         // @deprecated backwards-compatible fit_markers
