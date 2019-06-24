@@ -97,6 +97,10 @@ if (isset($_POST['submit'])) {
               <label class="label">Additional search radius: <small>(works only together with country)</small></label>
               <input id="country_radius" name="country_radius" type="number" placeholder="0" step="1" min="0" max="20000" value="<?php echo htmlspecialchars($settings->get("country_radius")); ?>">
           </div>
+          <div class="">
+              <label class="label">Max. caching time for events (in seconds):</small></label>
+              <input id="cache_time" name="cache_time" type="number" placeholder="0" step="1" min="0" max="20000" value="<?php echo htmlspecialchars($settings->get("cache_time")); ?>">
+          </div>
       </div>
   <div class="submit">
       <input type="submit"

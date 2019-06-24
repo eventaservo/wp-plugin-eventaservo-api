@@ -26,6 +26,7 @@ if (!defined('ABSPATH')) {
  */
 
 require_once plugin_dir_path( dirname( __FILE__ ) ) . 'admin/eventaservo-api-admin.php';
+require_once plugin_dir_path( dirname( __FILE__ ) ) . 'shortcodes/shortcodes-common.php';
 $settings = Eventaservo_Plugin_Settings::init();
 
 class Eventaservo_Api {
@@ -79,36 +80,12 @@ private function load_dependencies(){
 		add_action( 'wp_enqueue_scripts', array('Eventaservo_Api', 'enqueues' ));
 	}
 
-  public static function getEventJSON(){
-      //get event JSON
-      $settings = Eventaservo_Plugin_Settings::init();
-      $mail = $settings->get('user_mail');
-      $api_key = $settings->get('user_token');
-      $date_start = $settings->get('date_start');
-      $date_end = $settings->get('date_end');
-      $filters = "";
-      $url = "https://eventaservo.org/api/v1/events.json?user_email=$mail&user_token=$api_key&komenca_dato=$date_start&fina_dato=$date_end"; //&$filters
-      $json = file_get_contents($url);
-      $obj = json_decode($json);
-      $json_string = json_encode($obj, JSON_UNESCAPED_UNICODE);
-      return $json_string;
-  }
-
 	public static function enqueues(){
 		global $post;
     $cont = $post->post_content;
     $has_mapo = has_shortcode($cont, "evento_mapo");
     $has_kalendaro = has_shortcode($cont, "evento_kalendaro");
-    //TODO pensu pri caching
-    //$time = $this->settings->get('lastEventFetch');
-    //if ($time + 1000 * 60 * 15 < microtime(true)) {
-    //  $this->eventJSON = $settings->get('eventJSON');
-    //} else {
-    //  $this->eventJSON = $this->getEventJSON();
-    //  $settings->set('lastEventFetch', $time);
-    //  $settings->set('eventJSON', $this->eventJSON);
-    //}
-    $eventoj = self::getEventJSON();
+    $eventoj = getEventJSON();
 
     ?>
     <script type="text/javascript">

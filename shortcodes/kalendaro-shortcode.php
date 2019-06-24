@@ -1,7 +1,5 @@
 <?php
 
-
-require_once plugin_dir_path( dirname( __FILE__ ) ) . 'shortcodes/shortcodes-common.php';
 require_once plugin_dir_path( dirname( __FILE__ ) ) . 'admin/eventaservo-api-admin.php';
 $settings = Eventaservo_Plugin_Settings::init();
 
@@ -20,22 +18,11 @@ class Eventaservo_Api_Shortcode_Kalendaro
      */
     protected function getHTML($atts='', $content=null){
         extract($this->getAtts($atts));
-
-        //TODO pensu pri caching
-        //$time = $this->settings->get('lastEventFetch');
-        //if ($time + 1000 * 60 * 15 < microtime(true)) {
-        //  $this->eventJSON = $settings->get('eventJSON');
-        //} else {
-        //  $this->eventJSON = getEventJSON();
-        //  $settings->set('lastEventFetch', $time);
-        //  $settings->set('eventJSON', $this->eventJSON);
-        //}
         $settings = Eventaservo_Plugin_Settings::init();
         $lat = empty($lat) ? $settings->get('cord-lat') : $lat;
         $lng = empty($lng) ? $settings->get('cord-lon') : $lng;
         $tileurl = empty($tileurl) ? $settings->get('map_tile_url') : $tileurl;
-        $eventoj = getEventJSON();
-        $list_view = empty($lng) ? $settings->get('list_view') : $lng;
+        $list_view = empty($list_view) ? $settings->get('list_view') : $list_view;
         /* should be iterated for multiple maps */
         ob_start(); ?>
         <div id="kalendaro" class="leaflet-map"
@@ -46,8 +33,7 @@ class Eventaservo_Api_Shortcode_Kalendaro
           list_view: <?php echo $list_view ?>,
         };
         </script>
-        <?php wp_add_inline_script("mpi", "$( document ).ready(map_init);");
-        wp_enqueue_script("mpi");
+        <?php
         return ob_get_clean();
     }
 

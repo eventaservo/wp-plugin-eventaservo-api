@@ -34,15 +34,14 @@ class Eventaservo_Plugin_Settings
         /* update leaflet version from main class */
         $leaflet_version = Eventaservo_Api_Admin::$leaflet_version;
         $this->api_options = array(
-            'user_mail'  => '',
-            'user_token' => '',
+            'user_mail'        => '',
+            'user_token'       => '',
             'events_from_user' => '',
-            'date_start' => '',
-            'date_end'   => '',
+            'date_start'       => '',
+            'date_end'         => '',
             'country_filter'   => '',
             'country_radius'   => 0,
-            //'lastEventFetch' => 0,
-            //'eventJSON' => '',
+            'cache_time'       => 900,
         );
         $this->map_options = array(
             "clustering"   => "no",
