@@ -19,11 +19,6 @@ class Eventaservo_Api_Shortcode_Kalendaro
     protected function getHTML($atts='', $content=null){
         extract($this->getAtts($atts));
         $settings = Eventaservo_Plugin_Settings::init();
-        $lat = empty($lat) ? $settings->get('cord-lat') : $lat;
-        $lng = empty($lng) ? $settings->get('cord-lon') : $lng;
-        $tileurl = empty($tileurl) ? $settings->get('map_tile_url') : $tileurl;
-        $list_view = empty($list_view) ? $settings->get('list_view') : $list_view;
-        /* should be iterated for multiple maps */
         ob_start(); ?>
         <div id="kalendaro" class="leaflet-map"
             style="height:<?php echo $height; ?>; width:<?php echo $width; ?>;"></div> <!--TODO -<?php echo $this->map_id; ?>-->
@@ -82,22 +77,16 @@ class Eventaservo_Api_Shortcode_Kalendaro
 
         $settings = Eventaservo_Plugin_Settings::init();
 
-        $atts['zoom'] = array_key_exists('zoom', $atts) ?
-            $zoom : $settings->get('zoom-start');
-        $atts['height'] = empty($height) ?
-            $settings->get('map-height') : $height;
-        $atts['width'] = empty($width) ? $settings->get('map-width') : $width;
-        $atts['zoomcontrol'] = array_key_exists('zoomcontrol', $atts) ?
-            $zoomcontrol : $settings->get('show_zoom_controls');
-        $atts['min_zoom'] = array_key_exists('min_zoom', $atts) ?
-            $min_zoom : $settings->get('zoom-min');
-        $atts['max_zoom'] = empty($max_zoom) ?
-            $settings->get('zoom-max') : $max_zoom;
-        $atts['scrollwheel'] = true;//array_key_exists('scrollwheel', $atts) ?
-            //$scrollwheel : $settings->get('scroll_wheel_zoom');
-        $atts['doubleclickzoom'] = true;//array_key_exists('doubleclickzoom', $atts) ?
-        $atts['list_view'] = true;//array_key_exists('doubleclickzoom', $atts) ?
-            //$doubleclickzoom : $settings->get('double_click_zoom');
+        $atts['zoom']            = array_key_exists('zoom', $atts) ? $zoom : $settings->get('zoom-start');
+        $atts['height']          = array_key_exists('map-height', $atts) ? $height : $settings->get('map-height');
+        $atts['width']           = array_key_exists('map-width', $atts) ? $width : $settings->get('map-width');
+        $atts['zoomcontrol']     = array_key_exists('zoomcontrol', $atts) ? $zoomcontrol : $settings->get('show_zoom_controls');
+        $atts['min_zoom']        = array_key_exists('min_zoom', $atts) ? $min_zoom : $settings->get('zoom-min');
+        $atts['max_zoom']        = array_key_exists('zoom-max', $atts) ? $max_zoom : $settings->get('zoom-max');
+        $atts['scrollwheel']     = array_key_exists('scroll_wheel_zoom', $atts) ? $scrollwheel : $settings->get('scroll_wheel_zoom');
+        $atts['doubleclickzoom'] = array_key_exists('double_click_zoom', $atts) ? $doubleclickzoom : $settings->get('double_click_zoom');
+        $atts['doubleclickzoom'] = array_key_exists('double_click_zoom', $atts) ? $doubleclickzoom : $settings->get('double_click_zoom');
+        $atts['list_view']       = array_key_exists('list_view', $atts) ? $list_view : $settings->get('list_view');
 
         // @deprecated backwards-compatible fit_markers
         $atts['fit_markers'] = array_key_exists('fit_markers', $atts) ?
@@ -149,9 +138,9 @@ class Eventaservo_Api_Shortcode_Kalendaro
                 : isset($boxZoom)
                     ? $boxZoom
                     : null,
-            'touchZoom' => isset($touchZoom) ? $touchZoom : null,
-            'dragging' => isset($dragging) ? $dragging : null,
-            'keyboard' => isset($keyboard) ? $keyboard : null,
+            'touchZoom' => True,//isset($touchZoom) ? $touchZoom : null,
+            'dragging'  => True,//isset($dragging) ? $dragging : null,
+            'keyboard'  => isset($keyboard) ? $keyboard : null,
         );
 
         // filter out nulls
