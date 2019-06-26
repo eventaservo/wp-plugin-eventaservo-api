@@ -1,6 +1,5 @@
 <?php
 
-
 require_once plugin_dir_path( dirname( __FILE__ ) ) . 'shortcodes/shortcodes-common.php';
 require_once plugin_dir_path( dirname( __FILE__ ) ) . 'admin/eventaservo-api-admin.php';
 
@@ -31,7 +30,7 @@ class Eventaservo_Api_Shortcode_Mapo
             style="height:<?php echo $height; ?>; width:<?php echo $width; ?>;"></div>  <!-- php echo $this->map_id;  -->
         <script type="text/javascript">
         eventaservo_settings.mapo = {
-              map_tile_url: '<?php echo $tileurl?>',
+              map_tile_url: '<?php echo $tileurl ?>',
               max_zoom: <?php echo $max_zoom; ?>,
               min_zoom: <?php echo $min_zoom; ?>,
               zoomcontrol: <?php echo $zoomcontrol; ?>,
@@ -93,53 +92,18 @@ class Eventaservo_Api_Shortcode_Mapo
 
         $settings = Eventaservo_Plugin_Settings::init();
 
-        $atts['zoom'] = array_key_exists('zoom', $atts) ?
-            $zoom : $settings->get('zoom-start');
-        $atts['height'] = empty($height) ?
-            $settings->get('map-height') : $height;
+        $atts['zoom'] = array_key_exists('zoom', $atts) ? $zoom : $settings->get('zoom-start');
+        $atts['height'] = empty($height) ? $settings->get('map-height') : $height;
         $atts['width'] = empty($width) ? $settings->get('map-width') : $width;
-        $atts['zoomcontrol'] = array_key_exists('zoomcontrol', $atts) ?
-            $zoomcontrol : $settings->get('show_zoom_controls');
-        $atts['min_zoom'] = array_key_exists('min_zoom', $atts) ?
-            $min_zoom : $settings->get('zoom-min');
-        $atts['max_zoom'] = empty($max_zoom) ?
-            $settings->get('zoom-max') : $max_zoom;
-        $atts['scrollwheel'] = true;//array_key_exists('scrollwheel', $atts) ?
-            //$scrollwheel : $settings->get('scroll_wheel_zoom');
-        $atts['doubleclickzoom'] = true;//array_key_exists('doubleclickzoom', $atts) ?
-            //$doubleclickzoom : $settings->get('double_click_zoom');
-
-        // @deprecated backwards-compatible fit_markers
-        $atts['fit_markers'] = array_key_exists('fit_markers', $atts) ?
-            $fit_markers : $settings->get('fit_markers');
-
-        // fitbounds is what it should be called @since v2.12.0
-        $atts['fitbounds'] = array_key_exists('fitbounds', $atts) ?
-            $fitbounds : $atts['fit_markers'];
+        $atts['zoomcontrol'] = array_key_exists('zoomcontrol', $atts) ? $zoomcontrol : $settings->get('show_zoom_controls');
+        $atts['min_zoom'] = array_key_exists('min_zoom', $atts) ? $min_zoom : $settings->get('zoom-min');
+        $atts['max_zoom'] = empty($max_zoom) ? $settings->get('zoom-max') : $max_zoom;
+        $atts['scrollwheel'] = array_key_exists('scrollwheel', $atts) ? $scrollwheel : $settings->get('scrollwheel');
+        $atts['doubleclickzoom'] = array_key_exists('doubleclickzoom', $atts) ? $doubleclickzoom : $settings->get('doubleclickzoom');
 
         /* allow percent, but add px for ints */
         $atts['height'] .= is_numeric($atts['height']) ? 'px' : '';
         $atts['width'] .= is_numeric($atts['width']) ? 'px' : '';
-
-        // maxbounds as string: maxbounds="50, -114; 52, -112"
-        $maxBounds = isset($maxbounds) ? $maxbounds : null;
-
-        if ($maxBounds) {
-            try {
-                // explode by semi-colons and commas
-                $maxBounds = preg_split("[;|,]", $maxBounds);
-                $maxBounds = array(
-                    array(
-                        $maxBounds[0], $maxBounds[1]
-                    ),
-                    array(
-                        $maxBounds[2], $maxBounds[3]
-                    )
-                );
-            } catch (Exception $e) {
-                $maxBounds = null;
-            }
-        }
 
         /*
         need to allow 0 or empty for removal of attribution
@@ -164,15 +128,8 @@ class Eventaservo_Api_Shortcode_Mapo
             'keyboard' => isset($keyboard) ? $keyboard : null,
         );
 
-        // filter out nulls
-        //$more_options = $this->LM->filter_null($more_options);
-
         // change string booleans to booleans
         $more_options = filter_var_array($more_options, FILTER_VALIDATE_BOOLEAN);
-
-        if ($maxBounds) {
-            $more_options['maxBounds'] = $maxBounds;
-        }
 
         // wrap as JSON
         if ($more_options) {

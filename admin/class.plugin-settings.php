@@ -58,6 +58,8 @@ class Eventaservo_Plugin_Settings
             'leaflet_cluster_js_url' => 'https://unpkg.com/leaflet.markercluster@1.4.1/dist/',
             'show_zoom_controls' => '1',
             'allow_map_scroll' => '1',
+            'doubleclickzoom' => '1',
+            'scrollwheel' => '1',
         );
 
         $this->calendar_options = array(

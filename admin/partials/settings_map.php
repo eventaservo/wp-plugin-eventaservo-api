@@ -22,8 +22,7 @@ if (isset($_POST['submit'])) {
 
     foreach ($settings->map_options as $name => $option) {
         /* checkboxes don't get sent if not checked */
-        if ($name == 'show_zoom_controls' ||
-            $name == 'allow_map_scroll'
+        if ($name == 'show_zoom_controls' || $name == 'allow_map_scroll' || $name == 'scrollwheel' || $name == 'doubleclickzoom'
         ) {
             $form[$name] = $settings->set($name, isset($_POST[ $name ]) ? 1 : 0);
             continue;
@@ -145,6 +144,14 @@ if (isset($_POST['submit'])) {
               <div class="">
                   <label class="label">Allow map scroll:</label>
                   <input id="allow_map_scroll" name="allow_map_scroll" type="checkbox" <?php if ($settings->get("allow_map_scroll")=="1") {echo "checked";} ?>>
+              </div>
+              <div class="">
+                  <label class="label">Scrollwheel:</label>
+                  <input id="scrollwheel" name="scrollwheel" type="checkbox" <?php if ($settings->get("scrollwheel")=="1") {echo "checked";} ?>>
+              </div>
+              <div class="">
+                  <label class="label">Doubleclickzoom:</label>
+                  <input id="doubleclickzoom" name="doubleclickzoom" type="checkbox" <?php if ($settings->get("doubleclickzoom")=="1") {echo "checked";} ?>>
               </div>
         </div>
     <div class="submit">
