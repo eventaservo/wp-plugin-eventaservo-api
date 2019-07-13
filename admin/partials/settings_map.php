@@ -12,6 +12,13 @@ $title = $plugin_data['Name'];
 $description = __('A plugin for using the eventaservo.org API in wordpress.', 'eventaservo-api');
 $version = $plugin_data['Version'];
 ?>
+<script type="text/javascript">
+  function updateLatLon() {
+    var latlng = document.getElementById("landelektilo").selectedOptions[0].value.split(",");
+    document.getElementById("cord-lat").value = latlng[0];
+    document.getElementById("cord-lon").value = latlng[1];
+  }
+</script>
 <div class="wrap">
     <h1><?php echo $title; ?> <small>version: <?php echo $version; ?></small></h1>
     <p><?php echo $description; ?></p>
@@ -22,8 +29,7 @@ if (isset($_POST['submit'])) {
 
     foreach ($settings->map_options as $name => $option) {
         /* checkboxes don't get sent if not checked */
-        if ($name == 'show_zoom_controls' || $name == 'allow_map_scroll' || $name == 'scrollwheel' || $name == 'doubleclickzoom'
-        ) {
+        if ($name == 'show_zoom_controls' || $name == 'allow_map_scroll' || $name == 'scrollwheel' || $name == 'doubleclickzoom') {
             $form[$name] = $settings->set($name, isset($_POST[ $name ]) ? 1 : 0);
             continue;
         }
@@ -49,7 +55,7 @@ if (isset($_POST['submit'])) {
         <div class="container">
           <h4>Map Apperance:</h4>
           <hr>
-          <div class="">
+          <div>
               <label class="label">Marker Clustering:</label>
               <div>
                 <input type="radio" name="clustering" id="no-clustering" value="no" <?php if ($settings->get("clustering")=="no") {echo "checked";} ?>>
@@ -64,11 +70,11 @@ if (isset($_POST['submit'])) {
                 <label for="prunecluster-clustering">Prunecluster</label>
               </div>
           </div>
-          <div class="">
+          <div>
               <label class="label">Width:</label>
               <input id="map-width" name="map-width" type="text" placeholder="100%" value="<?php echo htmlspecialchars($settings->get("map-width")); ?>">
           </div>
-          <div class="">
+          <div>
               <label class="label">Height:</label>
               <input id="map-height" name="map-height" type="text" placeholder="500px" value="<?php echo htmlspecialchars($settings->get("map-height")); ?>">
           </div>
@@ -76,24 +82,24 @@ if (isset($_POST['submit'])) {
         <div class="container">
           <h4>Start Coordinates:</h4>
           <hr>
-          <div class="">
+          <div>
               <label class="label">Lat:</label>
-              <input id="cord-lat" name="cord-lat" type="number" placeholder="53.350140" step="0.000001" min="-180" max="180" value="<?php echo htmlspecialchars($settings->get("cord-lat")); ?>">
+              <input id="cord-lat" name="cord-lat" type="number" placeholder="53.350140" step="0.000001" min="-90" max="90" value="<?php echo htmlspecialchars($settings->get("cord-lat")); ?>">
           </div>
-          <div class="">
+          <div>
               <label class="label">Lon:</label>
-              <input id="cord-lon" name="cord-lon" type="number" placeholder="-6.266155" step="0.000001" min="-90" max="90" value="<?php echo htmlspecialchars($settings->get("cord-lon")); ?>">
+              <input id="cord-lon" name="cord-lon" type="number" placeholder="-6.266155" step="0.000001" min="-180" max="180" value="<?php echo htmlspecialchars($settings->get("cord-lon")); ?>">
           </div>
-          <p>Or choose a start country, beeing focused on page load:</p>
-          <div class="">
+          <p>Or choose a start country, beeing focused on page load (sets Lat and Lon to the countries coordinates):</p>
+          <div>
               <label class="label">Start Country:</label>
-              <select style="float:right;" name="country">
+              <select style="float:right;" id="landelektilo" name="country" onchange="updateLatLon()">
                 <option value="">-----------------</option>
                 <?php
                 $str = file_get_contents( dirname( __FILE__ )  . '/../assets/countries.json');
                 $j = json_decode($str, true);
                 foreach($j as $key => $value){
-                  echo '<option value="' . $value['latlng'] . '">'.$value['name'].'</option>'; //close your tags!!
+                  echo '<option value="' . $value['latlng'][0] . "," .$value['latlng'][1] . '">'.$value['name'].'</option>'; //close your tags!!
                 }
                 ?>
               </select>
@@ -103,15 +109,15 @@ if (isset($_POST['submit'])) {
         <div class="container">
             <h4>Zoom Settings:</h4>
             <hr>
-            <div class="">
+            <div>
                 <label class="label">Minimal zoom:</label>
                 <input id="zoom-min"   name="zoom-min"   type="number" placeholder="1" step="1" min="1" max="18" value="<?php echo htmlspecialchars($settings->get("zoom-min")); ?>">
             </div>
-            <div class="">
+            <div>
                 <label class="label">Maximal zoom:</label>
                 <input id="zoom-max"   name="zoom-max"   type="number" placeholder="18" step="1" min="1" max="18" value="<?php echo htmlspecialchars($settings->get("zoom-max")); ?>">
             </div>
-            <div class="">
+            <div>
                 <label class="label">Start zoom:</label>
                 <input id="zoom-start" name="zoom-start" type="number" placeholder="5" step="1" min="1" max="18" value="<?php echo htmlspecialchars($settings->get("zoom-start")); ?>">
             </div>
@@ -119,7 +125,7 @@ if (isset($_POST['submit'])) {
         <div class="container">
             <h4>Config CDN URLs</h4>
             <hr>
-              <div class="">
+              <div>
                   <label class="label">Tile URL:</label>
                   <input id="map_tile_url" name="map_tile_url" type="url" placeholder="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png" value="<?php echo htmlspecialchars($settings->get("map_tile_url")); ?>">
               </div>
@@ -137,19 +143,19 @@ if (isset($_POST['submit'])) {
               </div>
               <h4>Other Options</h4>
               <hr>
-              <div class="">
+              <div>
                   <label class="label">Show Zoom Controls:</label>
                   <input id="show_zoom_controls" name="show_zoom_controls" type="checkbox" <?php if ($settings->get("show_zoom_controls")=="1") {echo "checked";} ?>>
               </div>
-              <div class="">
+              <div>
                   <label class="label">Allow map scroll:</label>
                   <input id="allow_map_scroll" name="allow_map_scroll" type="checkbox" <?php if ($settings->get("allow_map_scroll")=="1") {echo "checked";} ?>>
               </div>
-              <div class="">
+              <div>
                   <label class="label">Scrollwheel:</label>
                   <input id="scrollwheel" name="scrollwheel" type="checkbox" <?php if ($settings->get("scrollwheel")=="1") {echo "checked";} ?>>
               </div>
-              <div class="">
+              <div>
                   <label class="label">Doubleclickzoom:</label>
                   <input id="doubleclickzoom" name="doubleclickzoom" type="checkbox" <?php if ($settings->get("doubleclickzoom")=="1") {echo "checked";} ?>>
               </div>

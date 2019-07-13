@@ -97,6 +97,7 @@ private function load_dependencies(){
     $settings = Eventaservo_Plugin_Settings::init();
     if ($has_mapo || $has_kalendaro) {
         wp_enqueue_script("momentjs", 'https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.24.0/moment.min.js', array(), 0, true);
+        wp_enqueue_script("momentjs_eo_locale", 'https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.24.0/locale/eo.js', array(), 0, true);
     }
     if ($has_mapo) {
         wp_enqueue_style('leaflet_stylesheet', $settings->get("leaflet_css_url"));

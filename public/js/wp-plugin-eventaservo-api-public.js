@@ -30,8 +30,7 @@
      */
      var pruneCluster;
      var map;
-     var minDate,
-          maxDate ;
+     var minDate, maxDate ;
 
      function renkontigxoJson2teksto(e) {
          var eTekst = "";
@@ -44,9 +43,9 @@
            eTekst += '</a>';
          }
          eTekst += '<dt><b>Datoj:</b></dt><dd>';
-         //eTekst += moment(e.komenca_dato, "YYYY-MM-DD").format("Do MMMM YYYY");
+         eTekst += moment(e.komenca_dato, "YYYY-MM-DD").format("Do MMMM YYYY");
          if (e["komenca_dato"] != e["fina_dato"]){
-             //eTekst += ' - ' + moment(e.fina_dato, "YYYY-MM-DD").format("Do MMMM YYYY");
+             eTekst += ' - ' + moment(e.fina_dato, "YYYY-MM-DD").format("Do MMMM YYYY");
          }
          eTekst += '</dd>';
 
@@ -62,7 +61,7 @@
          var pruneCluster = new PruneClusterForLeaflet();
          // TODO map_id por multaj mapoj -<?php echo $this->map_id; ?>
          var map = L.map('eventaservo_leaflet-map', options)
-                     .setView([eventaservo_settings.mapo.lat, eventaservo_settings.mapo.lat], eventaservo_settings.mapo.zoom);
+                     .setView([eventaservo_settings.mapo.lat, eventaservo_settings.mapo.lng], eventaservo_settings.mapo.zoom);
 
          var pinglo_senkolora = '<svg width="20mm" height="22mm" version="1.1" viewBox="0 0 20 22" xmlns="http://www.w3.org/2000/svg"><path class="pinglo" d="m10 22 5-3.5c8.8-7.0 5-18.5-5-18.5-9.94 0-13.8 11.9-5 18.5z" stroke-width=".3"/><path class="stelo" d="m10,5.5 1,3 h3 l-2.37,2 0.87,3 L10,11.68 7.6,13.47 8.4,10.445 6,8.5 9,8.48Z"/></svg>';
 
@@ -148,39 +147,52 @@
            },
            createShadow: function () {
              return null;
-           },
-           draw: function(canvas, width, height) {
-             var lol = 0;
-             var start = 0;
-             for (var i = 0, l = colors.length; i < l; ++i) {
-               var size = this.stats[i] / this.population;
-               if (size > 0) {
-                 canvas.beginPath();
-                 canvas.moveTo(22, 22);
-                 canvas.fillStyle = colors[i];
-                 var from = start + 0.14,
-                 to = start + size * pi2;
-                 if (to < from) {
-                   from = start;
-                 }
-                 canvas.arc(22,22,22, from, to);
-                 start = start + size*pi2;
-                 canvas.lineTo(22,22);
-                 canvas.fill();
-                 canvas.closePath();
-               }
-             }
-             canvas.beginPath();
-             canvas.fillStyle = 'white';
-             canvas.arc(22, 22, 18, 0, Math.PI*2);
-             canvas.fill();
-             canvas.closePath();
-             canvas.fillStyle = '#555';
-             canvas.textAlign = 'center';
-             canvas.textBaseline = 'middle';
-             canvas.font = 'bold 12px sans-serif';
-             canvas.fillText(this.population, 22, 22, 40);
-           }
+           },    draw: function(canvas, width, height) {
+
+            var lol = 0;
+
+            var start = 0;
+            for (var i = 0, l = colors.length; i < l; ++i) {
+
+                var size = this.stats[i] / this.population;
+
+
+                if (size > 0) {
+
+                    canvas.beginPath();
+
+                    var angle = Math.PI/4*i;
+                    var posx = Math.cos(angle) * 18, posy = Math.sin(angle) * 18;
+
+
+                    var xa = 0, xb = 1, ya = 4, yb = 8;
+
+                    // var r = ya + (size - xa) * ((yb - ya) / (xb - xa));
+                    var r = ya + size * (yb - ya);
+
+
+                    //canvas.moveTo(posx, posy);
+                    canvas.arc(24+posx,24+posy, r, 0, pi2);
+                    canvas.fillStyle = colors[i];
+                    canvas.fill();
+                    canvas.closePath();
+                }
+
+            }
+
+            canvas.beginPath();
+            canvas.fillStyle = 'white';
+            canvas.arc(24, 24, 16, 0, Math.PI*2);
+            canvas.fill();
+            canvas.closePath();
+
+            canvas.fillStyle = '#555';
+            canvas.textAlign = 'center';
+            canvas.textBaseline = 'middle';
+            canvas.font = 'bold 12px sans-serif';
+
+            canvas.fillText(this.population, 24, 24, 48);
+        }
          });
          map.addLayer(pruneCluster);
      }
