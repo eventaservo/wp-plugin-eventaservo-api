@@ -19,6 +19,7 @@ class Eventaservo_Plugin_Settings
 
     //Singleton instance
     private static $_instance = null;
+    private static $_default_options;
     public $options;
 
     public static function init() {
@@ -27,6 +28,12 @@ class Eventaservo_Plugin_Settings
         }
 
         return self::$_instance;
+    }
+
+    public function resetDefaultSettings(){
+      foreach (self::$_default_options as $name => $option) {
+          self::$_instance->set($name, $option);
+      }
     }
 
     private function __construct()
@@ -70,6 +77,7 @@ class Eventaservo_Plugin_Settings
             'fullcalendar_css_url' => sprintf('https://unpkg.com/fullcalendar@3.10.0/dist/fullcalendar.css', $leaflet_version),
         );
         $options = array_merge($this->api_options, $this->map_options, $this->calendar_options);
+        self::$_default_options = array_merge($this->api_options, $this->map_options, $this->calendar_options);
     }
 
     public function get($key)

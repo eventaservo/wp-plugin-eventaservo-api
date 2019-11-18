@@ -30,7 +30,9 @@ class Eventaservo_Api_Activator {
 	 * @since    1.0.0
 	 */
 	public static function activate() {
-
+		require_once plugin_dir_path( dirname( __FILE__ ) ) . 'admin/class.plugin-settings.php';
+		$settings = Eventaservo_Plugin_Settings::init();
+		$settings->resetDefaultSettings();
 	}
 
 }
