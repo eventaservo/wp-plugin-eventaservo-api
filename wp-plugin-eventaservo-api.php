@@ -13,7 +13,7 @@
  * @package           Wp_Plugin_Eventaservo_Api
  *
  * @wordpress-plugin
- * Plugin Name:       Eventaservo api wordpress plugin
+ * Plugin Name:       eventaservo
  * Plugin URI:        https://github.com/eventaservo/wp-plugin-eventaservo-api
  * Description:       This is a short description of what the plugin does. It's displayed in the WordPress admin area.
  * Version:           1.0.0

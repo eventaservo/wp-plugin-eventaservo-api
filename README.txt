@@ -29,13 +29,21 @@ This section describes how to install the plugin and get it working.
 e.g.
 
 1. Upload `wp-plugin-eventaservo-api.php` to the `/wp-content/plugins/` directory
-1. Activate the plugin through the 'Plugins' menu in WordPress
-1. Place `<?php do_action('plugin_name_hook'); ?>` in your templates
+2. Activate the plugin through the 'Plugins' menu in WordPress
+3. Use one of the two shortcodes ("evento_kalendaro", "evento_mapo") in your
 
 == Screenshots ==
 
-1. This screen shot description corresponds to screenshot-1.(png|jpg|jpeg|gif). Note that the screenshot is taken from
-the /assets directory or the directory that contains the stable readme.txt (tags or trunk). Screenshots in the /assets
-directory take precedence. For example, `/assets/screenshot-1.png` would win over `/tags/4.3/screenshot-1.png`
-(or jpg, jpeg, gif).
-2. This is the second screen shot
+![Admin setting interface](assets/settings.png)
+![Result from shortcode usage (map)](assets/map.png)
+![Result from shortcode usage (calendar)](assets/calendar_list.png)
+![Result from shortcode usage (calendar, list style)](assets/calendar.png)
+
+## Support
+
+Add issues at <https://github.com/eventaservo/wp-plugin-eventaservo-api/issues>.
+
+== Changelog ==
+= v1.0.0 =
+* Post instalado + enigu de uzantdatumoj montras mapon kaj kalendaron pere de shortcode uzado
+* After Installation and user credential config shows a map and a calender on shortcode usage
