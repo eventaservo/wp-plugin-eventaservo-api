@@ -96,22 +96,22 @@ private function load_dependencies(){
     <?php
     $settings = Eventaservo_Plugin_Settings::init();
     if ($has_mapo || $has_kalendaro) {
-        wp_enqueue_script("momentjs", 'https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.24.0/moment.min.js', array(), 0, true);
-        wp_enqueue_script("momentjs_eo_locale", 'https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.24.0/locale/eo.js', array(), 0, true);
+        wp_enqueue_script("momentjs", plugin_dir_url( __FILE__ ) . '../public/js/moment.min.js', array(), 0, true);
+        wp_enqueue_script("momentjs_eo_locale", plugin_dir_url( __FILE__ ) . '../public/js/fullcalendar.locale.eo.js', array(), 0, true);
     }
     if ($has_mapo) {
-        wp_enqueue_style('leaflet_stylesheet', $settings->get("leaflet_css_url"));
-        wp_enqueue_script('wp_leaflet_map_js', $settings->get("leaflet_js_url"));
+        wp_enqueue_style('leaflet_stylesheet', plugin_dir_url( __FILE__ ) . '../public/css/leaflet.css');
+        wp_enqueue_script('wp_leaflet_map_js', plugin_dir_url( __FILE__ ) . '../public/js/leaflet.js', array(), 0, true);
         wp_enqueue_script("PruneCluster", plugin_dir_url( __FILE__ ) . '../public/js/PruneCluster.js', array(), 0, true);
     }
     if ($has_kalendaro) {
-        wp_enqueue_script("qtip", 'https://cdnjs.cloudflare.com/ajax/libs/qtip2/3.0.3/basic/jquery.qtip.js', array(), 0, true);
-        wp_enqueue_style('fullcalendar_stylesheet', $settings->get("fullcalendar_css_url"));
-    		wp_enqueue_script('wp_fullcalendar_js', $settings->get("fullcalendar_js_url"), array(), 0, true);
+        wp_enqueue_script("qtip",  plugin_dir_url( __FILE__ ) . '../public/js/jquery.qtip.js', array(), 0, true);
+        wp_enqueue_style('fullcalendar_stylesheet', plugin_dir_url( __FILE__ ) . '../public/css/fullcalendar.css');
+    		wp_enqueue_script('wp_fullcalendar_js', plugin_dir_url( __FILE__ ) . '../public/js/fullcalendar.min.js', array(), 0, true);
     }
     if ($has_mapo || $has_kalendaro) {
+      wp_enqueue_style( "eventaservo_css", plugin_dir_url( __FILE__ ) . '../public/css/wp-plugin-eventaservo-api-public.css');
       wp_enqueue_script("eventaservo_js" , plugin_dir_url( __FILE__ ) . '../public/js/wp-plugin-eventaservo-api-public.js', array( 'jquery' ), 0, false );
-      wp_enqueue_style( "eventaservo_css", plugin_dir_url( __FILE__ ) . '../public/css/wp-plugin-eventaservo-api-public.css', array(), 0, 'all' );
     }
 	}
 

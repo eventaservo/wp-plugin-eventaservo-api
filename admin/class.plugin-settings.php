@@ -60,9 +60,6 @@ class Eventaservo_Plugin_Settings
             "zoom-max"     => "18",
             "zoom-start"   => "5",
             'map_tile_url' => 'https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png',
-            'leaflet_js_url' =>  sprintf('https://unpkg.com/leaflet@%s/dist/leaflet.js', $leaflet_version),
-            'leaflet_css_url' => sprintf('https://unpkg.com/leaflet@%s/dist/leaflet.css', $leaflet_version),
-            'leaflet_cluster_js_url' => 'https://unpkg.com/leaflet.markercluster@1.4.1/dist/',
             'show_zoom_controls' => '1',
             'allow_map_scroll' => '1',
             'doubleclickzoom' => '1',
@@ -73,8 +70,6 @@ class Eventaservo_Plugin_Settings
             "calendar-width"    => "100%",
             "calendar-height"   => "500px",
             "list_view"   => '1',
-            'fullcalendar_js_url' => sprintf('https://unpkg.com/fullcalendar@3.10.0/dist/fullcalendar.js', $leaflet_version),
-            'fullcalendar_css_url' => sprintf('https://unpkg.com/fullcalendar@3.10.0/dist/fullcalendar.css', $leaflet_version),
         );
         $options = array_merge($this->api_options, $this->map_options, $this->calendar_options);
         self::$_default_options = array_merge($this->api_options, $this->map_options, $this->calendar_options);

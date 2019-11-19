@@ -129,18 +129,6 @@ if (isset($_POST['submit'])) {
                   <label class="label">Tile URL:</label>
                   <input id="map_tile_url" name="map_tile_url" type="url" placeholder="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png" value="<?php echo htmlspecialchars($settings->get("map_tile_url")); ?>">
               </div>
-              <div>
-                <label class="label">Leaflet JS:</label>
-                <input id="leaflet_js_url" name="leaflet_js_url" type="url" placeholder="https://unpkg.com/leaflet@1.4.0/dist/leaflet.js" value="<?php echo htmlspecialchars($settings->get("leaflet_js_url")); ?>">
-              </div>
-              <div>
-                  <label class="label">Leaflet CSS:</label>
-                  <input id="leaflet_css_url" name="leaflet_css_url" type="url" placeholder="https://unpkg.com/leaflet@1.4.0/dist/leaflet.css" value="<?php echo htmlspecialchars($settings->get("leaflet_css_url")); ?>">
-              </div>
-              <div>
-                <label class="label">Leaflet Cluster JS:</label>
-                <input id="leaflet_cluster_js_url" name="leaflet_cluster_js_url" type="url" placeholder="https://unpkg.com/leaflet.markercluster@1.4.1/dist/" value="<?php echo htmlspecialchars($settings->get("leaflet_cluster_js_url")); ?>">
-              </div>
               <h4>Other Options</h4>
               <hr>
               <div>

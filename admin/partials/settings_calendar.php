@@ -67,18 +67,6 @@ if (isset($_POST['submit'])) {
               <input id="list_view" name="list_view" type="checkbox" <?php if ($settings->get("list_view")=="1") {echo "checked";} ?>>
           </div>
         </div>
-        <div class="container">
-            <h4>Config CDN URLs</h4>
-            <hr>
-              <div>
-                <label class="label">Fullcalendar JS:</label>
-                <input id="fullcalendar_js_url" name="fullcalendar_js_url" type="url" placeholder="https://unpkg.com/fullcalendar@3.10.0/dist/fullcalendar.js" value="<?php echo htmlspecialchars($settings->get("fullcalendar_js_url")); ?>">
-              </div>
-              <div>
-                  <label class="label">Fullcalendar CSS:</label>
-                  <input id="fullcalendar_css_url" name="fullcalendar_css_url" type="url" placeholder="https://unpkg.com/fullcalendar@3.10.0/dist/fullcalendar.css" value="<?php echo htmlspecialchars($settings->get("fullcalendar_css_url")); ?>">
-              </div>
-        </div>
     <div class="submit">
         <input type="submit"
             name="submit"
